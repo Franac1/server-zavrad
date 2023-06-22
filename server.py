@@ -24,7 +24,7 @@ def handle_tcp_client(client, address):
                 client.send(message)
             else:
                 break
-        except (socket.timeout, KeyboardInterrupt):
+        except (KeyboardInterrupt):
             client.close()
             print(f"Zatvorio sam konekciju sa klijentom {client.getpeername()}")
             break
@@ -33,13 +33,12 @@ def handle_tcp_client(client, address):
 def start_udp_server():
     server = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     server.bind((SERVER_IP, UDP_PORT))
-    server.settimeout(10.0)
     while True:
         try:
             message, address = server.recvfrom(1024)
             print(f"UDP Server: Got a message from {address}")
             server.sendto(message, address)
-        except (socket.timeout, KeyboardInterrupt):
+        except (KeyboardInterrupt):
             print("Shutting down UDP server...")
             server.close()
             break
@@ -48,7 +47,6 @@ def start_udp_server():
 def start_tcp_server():
     server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     server.bind((SERVER_IP, TCP_PORT))
-    server.settimeout(10.0)
     server.listen(3000)
     while True:
         try:
